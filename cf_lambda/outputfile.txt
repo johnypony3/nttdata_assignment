@@ -1,0 +1,1 @@
+"abbreviation: BST\nclient_ip: 35.85.247.172\ndatetime: 2021-10-23T13:20:22.573976+01:00\nday_of_week: 6\nday_of_year: 296\ndst: true\ndst_from: 2021-03-28T01:00:00+00:00\ndst_offset: 3600\ndst_until: 2021-10-31T01:00:00+00:00\nraw_offset: 0\ntimezone: Europe/London\nunixtime: 1634991622\nutc_datetime: 2021-10-23T12:20:22.573976+00:00\nutc_offset: +01:00\nweek_number: 42"
