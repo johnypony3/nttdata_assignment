@@ -2,10 +2,11 @@ Resources:
   TimeInfo:
     Type: Custom::TimeInfo
     Properties:
-      ServiceToken: !GetAtt GetTimeInfo.Arn
+      ServiceToken: !GetAtt GetTimeInfo111.Arn
       TimeZone: !Ref TimeZone
+      APIUrl: !Join ["/", [http://worldtimeapi.org/api/timezone, !Ref TimeZone]]
 
-  GetTimeInfoRole:
+  GetTimeInfo111Role:
     Type: "AWS::IAM::Role"
     Properties:
       AssumeRolePolicyDocument:
@@ -30,11 +31,11 @@ Resources:
                   - "logs:PutLogEvents"
                 Resource: "arn:aws:logs:*:*:*"
 
-  GetTimeInfo:
+  GetTimeInfo111:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: GetTimeInfo
-      Role: !GetAtt GetTimeInfoRole.Arn
+      FunctionName: GetTimeInfo111
+      Role: !GetAtt GetTimeInfo111Role.Arn
       Runtime: python3.9
       Handler: cfn_lambda.lambda_handler
       Code:

@@ -9,7 +9,9 @@ def lambda_handler(event, context):
     if event['RequestType'] == 'Delete':
         sendResponse(event, context, responseStatus, responseData)
 
-    timeInfo = getTimeInfo(event['ResourceProperties']['TimeZone'])
+    print(f'ResourceProperties: {event["ResourceProperties"]}')
+
+    timeInfo = getTimeInfo(event['ResourceProperties']['APIUrl'])
 
     responseData = {'timeInfo': getFormattedString(
         timeInfo), 'unixTime': getUnixTime(timeInfo)}
@@ -46,10 +48,8 @@ def getFormattedString(data):
     return f'abbreviation: {data["abbreviation"]} datetime: {data["datetime"]} day_of_week: {data["day_of_week"]} day_of_year: {data["day_of_year"]} dst: {str(data["dst"]).lower()} dst_from: {data["dst_from"]} dst_until: {data["dst_until"]} timezone: {data["timezone"]} unixtime: {data["unixtime"]} utc_offset: {data["utc_offset"]}'
 
 
-def getTimeInfo(timeZone):
-    print(f'timeZone: {timeZone}')
-    url = f'http://worldtimeapi.org/api/timezone/{timeZone}'
-    return json.loads(requests.request("GET", url, headers={}, data={}).text)
+def getTimeInfo(apiurl):
+    return json.loads(requests.request("GET", apiurl, headers={}, data={}).text)
 
 
 if __name__ == '__main__':
