@@ -1,5 +1,4 @@
 import json
-import os
 import requests
 
 
@@ -10,7 +9,7 @@ def lambda_handler(event, context):
     if event['RequestType'] == 'Delete':
         sendResponse(event, context, responseStatus, responseData)
 
-    timeInfo = getTimeInfo()
+    timeInfo = getTimeInfo(event['ResourceProperties']['TimeZone'])
 
     responseData = {'timeInfo': getFormattedString(
         timeInfo), 'unixTime': getUnixTime(timeInfo)}
@@ -26,7 +25,7 @@ def sendResponse(event, context, responseStatus, responseData):
                     'RequestId': event['RequestId'],
                     'LogicalResourceId': event['LogicalResourceId'],
                     'Data': responseData}
-    print('RESPONSE BODY:n' + json.dumps(responseBody))
+
     try:
         req = requests.put(event['ResponseURL'], data=json.dumps(responseBody))
         if req.status_code != 200:
@@ -47,10 +46,9 @@ def getFormattedString(data):
     return f'abbreviation: {data["abbreviation"]} datetime: {data["datetime"]} day_of_week: {data["day_of_week"]} day_of_year: {data["day_of_year"]} dst: {str(data["dst"]).lower()} dst_from: {data["dst_from"]} dst_until: {data["dst_until"]} timezone: {data["timezone"]} unixtime: {data["unixtime"]} utc_offset: {data["utc_offset"]}'
 
 
-def getTimeInfo():
-    timeZone = os.environ['TTIMEZONE']
-    print('timeZone:n' + timeZone)
-    url = "http://worldtimeapi.org/api/timezone/europe/" + timeZone
+def getTimeInfo(timeZone):
+    print(f'timeZone: {timeZone}')
+    url = f'http://worldtimeapi.org/api/timezone/europe/{timeZone}'
     return json.loads(requests.request("GET", url, headers={}, data={}).text)
 
 
