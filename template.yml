@@ -440,3 +440,6 @@ Outputs:
   TimeInformation:
     Description: Time information of specified timezone
     Value: !GetAtt TimeInfo.timeInfo
+  UnixTime:
+    Description: UnixTime of specified timezone
+    Value: !GetAtt TimeInfo.unixTime
