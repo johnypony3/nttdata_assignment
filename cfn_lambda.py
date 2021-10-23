@@ -10,7 +10,11 @@ def lambda_handler(event, context):
     if event['RequestType'] == 'Delete':
         sendResponse(event, context, responseStatus, responseData)
 
-    responseData = {'Success': 'Test Passed.', 'timeInfo': getTimeInfo()}
+    timeInfo = getTimeInfo()
+
+    responseData = {'timeInfo': getFormattedString(
+        timeInfo), 'unixTime': getUnixTime(timeInfo)}
+
     sendResponse(event, context, responseStatus, responseData)
 
 
@@ -35,12 +39,19 @@ def sendResponse(event, context, responseStatus, responseData):
         raise
 
 
+def getUnixTime(data):
+    return data["unixtime"]
+
+
+def getFormattedString(data):
+    return f'abbreviation: {data["abbreviation"]} datetime: {data["datetime"]} day_of_week: {data["day_of_week"]} day_of_year: {data["day_of_year"]} dst: {str(data["dst"]).lower()} dst_from: {data["dst_from"]} dst_until: {data["dst_until"]} timezone: {data["timezone"]} unixtime: {data["unixtime"]} utc_offset: {data["utc_offset"]}'
+
+
 def getTimeInfo():
     timeZone = os.environ['TTIMEZONE']
     print('timeZone:n' + timeZone)
     url = "http://worldtimeapi.org/api/timezone/europe/" + timeZone
-    data = json.loads(requests.request("GET", url, headers={}, data={}).text)
-    return f'abbreviation: {data["abbreviation"]} datetime: {data["datetime"]} day_of_week: {data["day_of_week"]} day_of_year: {data["day_of_year"]} dst: {str(data["dst"]).lower()} dst_from: {data["dst_from"]} dst_until: {data["dst_until"]} timezone: {data["timezone"]} unixtime: {data["unixtime"]} utc_offset: {data["utc_offset"]}'
+    return json.loads(requests.request("GET", url, headers={}, data={}).text)
 
 
 if __name__ == '__main__':
