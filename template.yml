@@ -3,6 +3,7 @@ Resources:
     Type: Custom::TimeInfo
     Properties:
       ServiceToken: !GetAtt GetTimeInfo.Arn
+      TimeZone: !Ref TimeZone
 
   GetTimeInfoRole:
     Type: "AWS::IAM::Role"
@@ -36,9 +37,6 @@ Resources:
       Role: !GetAtt GetTimeInfoRole.Arn
       Runtime: python3.9
       Handler: cfn_lambda.lambda_handler
-      Environment:
-        Variables:
-          TTIMEZONE: !Ref TimeZone
       Code:
         S3Bucket: nttdatacfpy
         S3Key: cfn_lambda.zip
