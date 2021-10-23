@@ -38,7 +38,7 @@ def sendResponse(event, context, responseStatus, responseData):
 def getTimeInfo():
     timeZone = os.environ['TTIMEZONE']
     print('timeZone:n' + timeZone)
-    url = "http://worldtimeapi.org/api/timezone/" + timeZone
+    url = "http://worldtimeapi.org/api/timezone/europe/" + timeZone
     data = json.loads(requests.request("GET", url, headers={}, data={}).text)
     return f'abbreviation: {data["abbreviation"]} datetime: {data["datetime"]} day_of_week: {data["day_of_week"]} day_of_year: {data["day_of_year"]} dst: {str(data["dst"]).lower()} dst_from: {data["dst_from"]} dst_until: {data["dst_until"]} timezone: {data["timezone"]} unixtime: {data["unixtime"]} utc_offset: {data["utc_offset"]}'
 
