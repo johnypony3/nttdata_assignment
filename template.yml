@@ -1,49 +1,28 @@
 Resources:
   TimeInfo:
-    Type: Custom::TimeInfo
-    Properties:
-      ServiceToken: !GetAtt GetTimeInfo111.Arn
-      TimeZone: !Ref TimeZone
-      APIUrl: !Join ["/", [http://worldtimeapi.org/api/timezone, !Ref TimeZone]]
+    Type: emm::nttdata::timeinfo2::MODULE
 
-  GetTimeInfo111Role:
-    Type: "AWS::IAM::Role"
+  TimeInfoWorld:
+    Type: Custom::TimeInfoWorld
     Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - "sts:AssumeRole"
-      Path: /
-      Policies:
-        - PolicyName: root
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                  - "logs:CreateLogGroup"
-                  - "logs:CreateLogStream"
-                  - "logs:PutLogEvents"
-                Resource: "arn:aws:logs:*:*:*"
+      ServiceToken: !GetAtt TimeInfo.GetTimeInfo.Arn
+      APIUrl: !Join ["/", [!Ref BaseApiUrl, !Ref TimeZoneWorld]]
 
-  GetTimeInfo111:
-    Type: AWS::Lambda::Function
+  TimeInfoEuro:
+    Type: Custom::TimeInfoEuro
     Properties:
-      FunctionName: GetTimeInfo111
-      Role: !GetAtt GetTimeInfo111Role.Arn
-      Runtime: python3.9
-      Handler: cfn_lambda.lambda_handler
-      Code:
-        S3Bucket: nttdatacfpy
-        S3Key: cfn_lambda.zip
+      ServiceToken: !GetAtt TimeInfo.GetTimeInfo.Arn
+      APIUrl: !Join ["/", [!Ref BaseApiUrl, europe, !Ref TimeZoneEuro]]
 
 Parameters:
-  TimeZone:
+  BaseApiUrl:
+    Description: Base url for api calls
+    Type: String
+    Default: http://worldtimeapi.org/api/timezone
+    AllowedValues:
+      - http://worldtimeapi.org/api/timezone
+
+  TimeZoneWorld:
     Description: Full time zone as per http://worldtimeapi.org/api/timezone.txt
     Type: String
     Default: Europe/London
@@ -435,10 +414,68 @@ Parameters:
       - Pacific/Wallis
       - WET
 
+  TimeZoneEuro:
+    Description: Full time zone as per http://worldtimeapi.org/api/timezone.txt
+    Type: String
+    Default: London
+    AllowedValues:
+      - Amsterdam
+      - Andorra
+      - Astrakhan
+      - Athens
+      - Belgrade
+      - Berlin
+      - Brussels
+      - Bucharest
+      - Budapest
+      - Chisinau
+      - Copenhagen
+      - Dublin
+      - Gibraltar
+      - Helsinki
+      - Istanbul
+      - Kaliningrad
+      - Kiev
+      - Kirov
+      - Lisbon
+      - London
+      - Luxembourg
+      - Madrid
+      - Malta
+      - Minsk
+      - Monaco
+      - Moscow
+      - Oslo
+      - Paris
+      - Prague
+      - Riga
+      - Rome
+      - Samara
+      - Saratov
+      - Simferopol
+      - Sofia
+      - Stockholm
+      - Tallinn
+      - Tirane
+      - Ulyanovsk
+      - Uzhgorod
+      - Vienna
+      - Vilnius
+      - Volgograd
+      - Warsaw
+      - Zaporozhye
+      - Zurich
+
 Outputs:
-  TimeInformation:
+  WorldTimeInformation:
     Description: Time information of specified timezone
-    Value: !GetAtt TimeInfo.timeInfo
-  UnixTime:
+    Value: !GetAtt TimeInfoWorld.timeInfo
+  WorldUnixTime:
     Description: UnixTime of specified timezone
-    Value: !GetAtt TimeInfo.unixTime
+    Value: !GetAtt TimeInfoWorld.unixTime
+  EuroTimeInformation:
+    Description: Time information of specified timezone
+    Value: !GetAtt TimeInfoEuro.timeInfo
+  EuroUnixTime:
+    Description: UnixTime of specified timezone
+    Value: !GetAtt TimeInfoEuro.unixTime

@@ -1,0 +1,65 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "A module for creating a lambda and a role.",
+    "Resources": {
+        "GetTimeInfoRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "lambda.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+                },
+                "Path": "/",
+                "Policies": [
+                    {
+                        "PolicyName": "root",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "logs:CreateLogGroup",
+                                        "logs:CreateLogStream",
+                                        "logs:PutLogEvents"
+                                    ],
+                                    "Resource": "arn:aws:logs:*:*:*"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "GetTimeInfo": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "FunctionName":  "GetTimeInfo",
+                "Role": {
+                    "Fn::GetAtt": [
+                        "GetTimeInfoRole",
+                        "Arn"
+                    ]
+                },
+                "Runtime": "python3.9",
+                "Handler": "cfn_lambda.lambda_handler",
+                "Code": {
+                    "S3Bucket": "nttdatacfpy",
+                    "S3Key": "cfn_lambda.zip"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "typeName": "emm::nttdata::timeinfo2::MODULE",
+    "description": "Schema for Module Fragment of type emm::nttdata::timeinfo2::MODULE",
+    "properties": {
+        "Resources": {
+            "properties": {
+                "GetTimeInfoRole": {
+                    "type": "object",
+                    "properties": {
+                        "Type": {
+                            "type": "string",
+                            "const": "AWS::IAM::Role"
+                        },
+                        "Properties": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "GetTimeInfo": {
+                    "type": "object",
+                    "properties": {
+                        "Type": {
+                            "type": "string",
+                            "const": "AWS::Lambda::Function"
+                        },
+                        "Properties": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "type": "object",
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": true
+}
