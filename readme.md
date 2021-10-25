@@ -26,7 +26,7 @@ Workflow:
 
 1. `resources/buildLambda.sh`
     - any time the lambda contents need to be updated
-2. `aws cloudformation deploy --stack-name nttdata --template-file template.yml --capabilities CAPABILITY_NAMED_IAM --parameter-overrides TimeZone=America/Boise`
+2. `aws cloudformation deploy --stack-name nttdata --template-file template.yml --capabilities CAPABILITY_NAMED_IAM --parameter-overrides TimeZoneWorld=America/Los_Angeles TimeZoneEuro=London`
     - deploy stack
     - specify the timezone from here: http://worldtimeapi.org/api/timezone
 3. `aws cloudformation delete-stack --stack-name nttdata`
